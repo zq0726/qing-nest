@@ -133,7 +133,7 @@ export class ChatGateway
   ) {
     const userId = (client.data as { userId?: string }).userId;
     const message: ChatMessage = {
-      userId,
+      userId: userId ?? '',
       content: payload.content,
       timestamp: Date.now(),
     };
@@ -164,7 +164,7 @@ export class ChatGateway
     @MessageBody() payload: { room: string },
   ) {
     const userId = (client.data as { userId?: string }).userId;
-    await this.chatService.joinRoom(client, payload.room, userId);
+    await this.chatService.joinRoom(client, payload.room, userId!);
     const members = await this.chatService.getRoomMembers(payload.room);
     this.chatService.sendToRoom(payload.room, 'system:room-members', {
       room: payload.room,
@@ -180,7 +180,7 @@ export class ChatGateway
     @MessageBody() payload: { room: string },
   ) {
     const userId = (client.data as { userId?: string }).userId;
-    await this.chatService.leaveRoom(client, payload.room, userId);
+    await this.chatService.leaveRoom(client, payload.room, userId!);
     return { ok: true, room: payload.room };
   }
 
